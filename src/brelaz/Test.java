@@ -1,0 +1,91 @@
+package brelaz;
+
+public class Test {
+
+	public static void main(String[] args) throws Exception {
+
+		Channels S = new Channels("S");
+		Channels T = new Channels("T");
+		// Channels H = new Channels("H");
+		// Channels O = new Channels("O");
+		// Channels P = new Channels("P");
+		Network N = new Network();
+		N.addChan(S);
+		N.addChan(T);
+		// N.addChan(H);
+		// N.addChan(O);
+		// N.addChan(P);
+		Device A = new Device("A");
+		Device B = new Device("B");
+		Device C = new Device("C");
+		Device E = new Device("E");
+		Device F = new Device("F");
+		Device D = new Device("D");
+		Arch AB = new Arch(A, B);
+		Arch AF = new Arch(A, F);
+		Arch BC = new Arch(C, B);
+		Arch CD = new Arch(C, D);
+		Arch DF = new Arch(D, F);
+		Arch DE = new Arch(D, E);
+		Arch EF = new Arch(E, F);
+		Arch DB = new Arch(B, D);
+		A.addArch(AB);
+		A.addArch(AF);
+		B.addArch(AB);
+		B.addArch(BC);
+		B.addArch(DB);
+		C.addArch(CD);
+		C.addArch(BC);
+		D.addArch(DE);
+		D.addArch(DF);
+		D.addArch(CD);
+		D.addArch(DB);
+		E.addArch(EF);
+		E.addArch(DE);
+		F.addArch(AF);
+		F.addArch(EF);
+		F.addArch(DF);
+		A.addChan(S);
+		A.addChan(T);
+		// A.addChan(H);
+		// A.addChan(O);
+		// A.addChan(P);
+		B.addChan(S);
+		B.addChan(T);
+		// B.addChan(H);
+		// B.addChan(O);
+		// B.addChan(P);
+		C.addChan(S);
+		C.addChan(T);
+		// C.addChan(H);
+		// C.addChan(O);
+		// C.addChan(P);
+		D.addChan(S);
+		D.addChan(T);
+		// D.addChan(H);
+		// D.addChan(O);
+		// D.addChan(P);
+		E.addChan(S);
+		E.addChan(T);
+		// E.addChan(H);
+		// E.addChan(O);
+		// E.addChan(P);
+		F.addChan(S);
+		F.addChan(T);
+		// F.addChan(H);
+		// F.addChan(O);
+		// F.addChan(P);
+		Graph Gr = new Graph();
+		Gr.addNode(A);
+		Gr.addNode(B);
+		Gr.addNode(C);
+		Gr.addNode(D);
+		Gr.addNode(E);
+		Gr.addNode(F);
+		Gr.printGraph();
+		BrelazAlgorithm Bre = new BrelazAlgorithm(Gr, N);
+		Bre.startAlgorithm();
+		Gr.printGraph();
+
+	}
+}
