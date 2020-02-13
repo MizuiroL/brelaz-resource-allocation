@@ -4,18 +4,22 @@ import java.util.LinkedList;
 
 public class Network {
 
-	public LinkedList<Channels> chan = new LinkedList<Channels>();
+	public LinkedList<Channel> channel = new LinkedList<Channel>();
 
-	public LinkedList<Channels> getChan() {
-		return chan;
+	public LinkedList<Channel> getChannel() {
+		return channel;
 	}
 
-	public void addChan(Channels C) {
-		chan.add(C);
+	public void addChan(Channel ch) {
+		channel.add(ch);
 	}
 
-	public void removeChan(Channels C) {
-		chan.remove(C);
+	public void removeChan(Channel chC) {
+		channel.remove(chC);
+	}
+
+	public Channel getRandomChannel() {
+		return channel.get((int) (Math.random() * channel.size()));
 	}
 
 }

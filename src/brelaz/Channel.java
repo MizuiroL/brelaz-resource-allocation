@@ -1,10 +1,10 @@
 package brelaz;
 
-class Channels {
+class Channel {
 
 	private String name;
 
-	public Channels(String name) {
+	public Channel(String name) {
 		this.name = name;
 	}
 
@@ -19,15 +19,11 @@ class Channels {
 
 /////////////////////////////////////////////
 
-	public void printChannels() {
+	public void printChannel() {
 		System.out.println(name);
 	}
-
-	public boolean equals(Channels C) {
-		boolean b = false;
-		if (name.equalsIgnoreCase(C.getName())) {
-			b = true;
-		}
-		return b;
+	
+	public boolean equals(Channel C) {
+		return name.equalsIgnoreCase(C.getName());
 	}
 }

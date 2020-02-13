@@ -17,17 +17,17 @@ public class Graph {
 		return unassignedNodes;
 	}
 
-	public void addNode(Device D) throws Exception {
-		nodes.add(D);
-		unassignedNodes.add(D);
+	public void addNode(Device device) throws Exception {
+		nodes.add(device);
+		unassignedNodes.add(device);
 	}
 
-	public void removeNode(Device D) throws Exception {
-		nodes.remove(D);
+	public void removeNode(Device device) throws Exception {
+		nodes.remove(device);
 	}
 
-	public void assignedNode(Device D) throws Exception {
-		unassignedNodes.remove(D);
+	public void assignedNode(Device device) throws Exception {
+		unassignedNodes.remove(device);
 	}
 
 	public void update() throws Exception {

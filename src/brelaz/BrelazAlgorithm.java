@@ -4,60 +4,56 @@ import java.util.Iterator;
 
 public class BrelazAlgorithm {
 
-	private Graph G;
-	private Network N;
+	private Graph graph;
+	private Network network;
 
-	public BrelazAlgorithm(Graph G, Network N) {
-		this.G = G;
-		this.N = N;
+	public BrelazAlgorithm(Graph graph, Network network) {
+		this.graph = graph;
+		this.network = network;
 	}
 
 	public Device selectNode() {
-		Iterator<Device> iterator = G.getUnassignedNodes().iterator();
-		Device D = iterator.next();
-		int max = D.rank();
-		Device E = null;
+		Iterator<Device> iterator = graph.getUnassignedNodes().iterator();
+		Device dev1 = iterator.next();
+		int max = dev1.rank();
+		Device dev2 = null;
 		while (iterator.hasNext()) {
-			E = iterator.next();
-			if (max < E.rank()) {
-				D = E;
-				max = E.rank();
+			dev2 = iterator.next();
+			if (max < dev2.rank()) {
+				dev1 = dev2;
+				max = dev2.rank();
 			}
 		}
-		return D;
+		return dev1;
 	}
 
 	public void assignChannel() throws Exception {
-		Device D = selectNode();
-		if (!D.getChan().isEmpty()) {
-			Channels C = D.getChan().pop();
-			D.setAssignedChan(C);
-			removeChan(D, C);
-			G.assignedNode(D);
-			G.update();
+		Device device = selectNode();
+		if (!device.getChan().isEmpty()) {
+			Channel channel = device.getChan().pop();
+			device.setAssignedChan(channel);
+			removeChannel(device, channel);
+			graph.assignedNode(device);
+			graph.update();
 		} else {
-			D.setAssignedChan(N.getChan().pop()); // Random
-			G.assignedNode(D);
-			G.update();
+			device.setAssignedChan(network.getChannel().pop()); // Random
+			graph.assignedNode(device);
+			graph.update();
 		}
 
 	}
 
-	public void removeChan(Device D, Channels C) throws Exception {
-		Iterator<Arch> iterator = D.getArch().iterator();
+	public void removeChannel(Device device, Channel channel) throws Exception {
+		Iterator<Arch> iterator = device.getArch().iterator();
 		while (iterator.hasNext()) {
-			Arch A = iterator.next();
-			A.getA().removeChan(C);
-			A.getB().removeChan(C);
+			Arch arch = iterator.next();
+			arch.getA().removeChan(channel);
+			arch.getB().removeChan(channel);
 		}
 	}
 
 	public boolean endAlgorithm() {
-		boolean b = false;
-		if (G.getUnassignedNodes().isEmpty()) {
-			b = true;
-		}
-		return b;
+		return graph.getUnassignedNodes().isEmpty();
 	}
 
 	public void startAlgorithm() throws Exception {

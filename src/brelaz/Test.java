@@ -4,8 +4,8 @@ public class Test {
 
 	public static void main(String[] args) throws Exception {
 
-		Channels S = new Channels("S");
-		Channels T = new Channels("T");
+		Channel S = new Channel("S");
+		Channel T = new Channel("T");
 		// Channels H = new Channels("H");
 		// Channels O = new Channels("O");
 		// Channels P = new Channels("P");

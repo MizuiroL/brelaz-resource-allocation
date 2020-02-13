@@ -6,11 +6,11 @@ import java.util.stream.Stream;
 
 public class Device {
 
-	private LinkedList<Channels> chan = new LinkedList<Channels>();
+	private LinkedList<Channel> channel = new LinkedList<Channel>();
 
 	private LinkedList<Arch> arch = new LinkedList<Arch>();
 
-	private Channels assignedChan;
+	private Channel assignedChannel;
 
 	private String name;
 
@@ -20,20 +20,20 @@ public class Device {
 
 	////////// Getters and Setters////////////
 
-	public LinkedList<Channels> getChan() {
-		return chan;
+	public LinkedList<Channel> getChan() {
+		return channel;
 	}
 
-	public void setChan(LinkedList<Channels> C) {
-		chan = C;
+	public void setChan(LinkedList<Channel> C) {
+		channel = C;
 	}
 
-	public Channels getAssignedChan() {
-		return assignedChan;
+	public Channel getAssignedChannel() {
+		return assignedChannel;
 	}
 
-	public void setAssignedChan(Channels assignedChan) {
-		this.assignedChan = assignedChan;
+	public void setAssignedChan(Channel assignedChannel) {
+		this.assignedChannel = assignedChannel;
 	}
 
 	public LinkedList<Arch> getArch() {
@@ -49,20 +49,20 @@ public class Device {
 	}
 	////////////////////////////////////////
 
-	public void addArch(Arch A) throws Exception {
-		arch.add(A);
+	public void addArch(Arch a) throws Exception {
+		this.arch.add(a);
 	}
 
-	public void removeArch(Arch A) throws Exception {
-		arch.remove(A);
+	public void removeArch(Arch a) throws Exception {
+		this.arch.remove(a);
 	}
 
-	public void addChan(Channels C) throws Exception {
-		chan.add(C);
+	public void addChan(Channel ch) throws Exception {
+		this.channel.add(ch);
 	}
 
-	public void removeChan(Channels C) throws Exception {
-		chan.remove(C);
+	public void removeChan(Channel ch) throws Exception {
+		this.channel.remove(ch);
 	}
 
 	public int rank() {
@@ -73,12 +73,12 @@ public class Device {
 	}
 
 	public void updateTopology() throws Exception {
-		if (getAssignedChan() != null) {
+		if (getAssignedChannel() != null) {
 			Iterator<Arch> iterator = arch.iterator();
 			while (iterator.hasNext()) {
 				Arch arch = iterator.next();
-				if (arch.getB().getAssignedChan() != null && arch.getA().getAssignedChan() != null
-						&& arch.getA().getAssignedChan().equals(arch.getB().getAssignedChan())) {
+				if (arch.getB().getAssignedChannel() != null && arch.getA().getAssignedChannel() != null
+						&& arch.getA().getAssignedChannel().equals(arch.getB().getAssignedChannel())) {
 					this.removeArch(arch);
 				}
 			}
@@ -89,8 +89,8 @@ public class Device {
 	public void printDevice() {
 		System.out.println("Node: " + name);
 		System.out.print("Assigned Channel: ");
-		if (assignedChan != null) {
-			assignedChan.printChannels();
+		if (assignedChannel != null) {
+			assignedChannel.printChannel();
 		} else {
 			System.out.println("There is no assigned channel");
 		}
