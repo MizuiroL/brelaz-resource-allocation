@@ -7,20 +7,15 @@ public class Network {
 	 * The Network contains the List that stores the Channels that are to be assigned to the Devices.
 	 */
 
-	public LinkedList<Channel> channelsList = new LinkedList<Channel>();
+	public LinkedList<Channel> channelsList;
+	
+	public Network(LinkedList<Channel> channelsList) {
+		this.channelsList = channelsList;
+	}
 
 	public LinkedList<Channel> getChannelsList() {
 		return channelsList;
 	}
-
-	public void addChannel(Channel channel) {
-		channelsList.add(channel);
-	}
-
-	public void removeChannel(Channel channel) {
-		channelsList.remove(channel);
-	}
-
 	public Channel getRandomChannel() {
 		/*
 		 * This method allows the selection of a random Channel

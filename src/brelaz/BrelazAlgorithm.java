@@ -9,36 +9,9 @@ public class BrelazAlgorithm {
 	 */
 
 	private Graph graph;
-	private Network network;
 
-	public BrelazAlgorithm(Graph graph, Network network) {
+	public BrelazAlgorithm(Graph graph) {
 		this.graph = graph;
-		this.network = network;
-	}
-	
-	public Device selectNode() {
-		/*
-		 * The algorithm will choose the device with the highest rank (highest number of adjacent nodes).
-		 * Only devices without an assigned channel are considered.
-		 */
-		Iterator<Device> iterator = graph.getUnassignedNodes().iterator();
-		Device chosenDevice = iterator.next();
-		int maxRank = chosenDevice.rank();
-		Device deviceToCompare = null;
-		
-		while (iterator.hasNext()) {
-			deviceToCompare = iterator.next();
-			/*
-			 * We iterate every node storing the temporary 'best'.
-			 * If a node has an higher rank it becomes the temporary best.
-			 * At the end of the iteration the node with the highest rank is returned.
-			 */
-			if (maxRank < deviceToCompare.rank()) {
-				chosenDevice = deviceToCompare;
-				maxRank = deviceToCompare.rank();
-			}
-		}
-		return chosenDevice;
 	}
 
 	public void assignChannel() throws Exception {
@@ -47,7 +20,7 @@ public class BrelazAlgorithm {
 		 * If the device has any available channel the one assigned is the first of the list
 		 * otherwise a random channel is assigned.
 		 */
-		Device device = selectNode();
+		Device device = graph.selectNode();
 		if (!device.getChannelsList().isEmpty()) {
 			Channel channel = device.getChannelsList().pop();
 			device.setAssignedChannel(channel);
@@ -57,19 +30,12 @@ public class BrelazAlgorithm {
 			 *  and from every adjacent device's list.
 			 */
 		} else {
-			device.setAssignedChannel(network.getChannelsList().pop()); // Random
+			device.setAssignedChannel(graph.getNetwork().getRandomChannel());
 		}
-
 		graph.assignedNode(device);
 		/* 
 		 * The device will be removed from the 'devices with no channel assigned' list.
 		 */
-		graph.update();
-		/*
-		 * If two adjacent nodes has the same channel assigned
-		 * the link between the two has to be removed.
-		 */
-
 	}
 
 	public void removeChannel(Device device, Channel channel) throws Exception {
@@ -100,5 +66,10 @@ public class BrelazAlgorithm {
 		while (!endAlgorithm()) {
 			assignChannel();
 		}
+		graph.update();
+		/*
+		 * If two adjacent nodes has the same channel assigned
+		 * the link between the two has to be removed.
+		 */
 	}
 }

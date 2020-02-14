@@ -12,6 +12,12 @@ public class Graph {
 	private LinkedList<Device> nodes = new LinkedList<Device>();
 
 	private LinkedList<Device> unassignedNodes = new LinkedList<Device>();
+	
+	private Network network;
+	
+	public Graph(Network network) {
+		this.network = network;
+	}
 
 	public LinkedList<Device> getNodes() {
 		return nodes;
@@ -20,10 +26,15 @@ public class Graph {
 	public LinkedList<Device> getUnassignedNodes() {
 		return unassignedNodes;
 	}
+	
+	public Network getNetwork() {
+		return network;
+	}
 
 	public void addNode(Device device) throws Exception {
 		nodes.add(device);
 		unassignedNodes.add(device);
+		uploadChannels(device);
 	}
 
 	public void removeNode(Device device) throws Exception {
@@ -45,12 +56,47 @@ public class Graph {
 			iterator.next().updateTopology();
 		}
 	}
+	
+	public void uploadChannels(Device device) throws Exception {
+		/*
+		 * 
+		 */
+		Iterator<Channel> iterator = network.getChannelsList().iterator();
+		while (iterator.hasNext()) {
+			device.addChannel(iterator.next());
+		}
+	}
 
 	public void printGraph() {
 		Iterator<Device> iterator = nodes.iterator();
 		while (iterator.hasNext()) {
 			iterator.next().printDevice();
 		}
+	}
+	
+	public Device selectNode() {
+		/*
+		 * The algorithm will choose the device with the highest rank (highest number of adjacent nodes).
+		 * Only devices without an assigned channel are considered.
+		 */
+		Iterator<Device> iterator = getUnassignedNodes().iterator();
+		Device chosenDevice = iterator.next();
+		int maxRank = chosenDevice.rank();
+		Device deviceToCompare = null;
+		
+		while (iterator.hasNext()) {
+			deviceToCompare = iterator.next();
+			/*
+			 * We iterate every node storing the temporary 'best'.
+			 * If a node has an higher rank it becomes the temporary best.
+			 * At the end of the iteration the node with the highest rank is returned.
+			 */
+			if (maxRank < deviceToCompare.rank()) {
+				chosenDevice = deviceToCompare;
+				maxRank = deviceToCompare.rank();
+			}
+		}
+		return chosenDevice;
 	}
 
 }

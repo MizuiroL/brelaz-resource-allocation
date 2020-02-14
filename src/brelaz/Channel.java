@@ -27,7 +27,7 @@ class Channel {
 		System.out.println(name);
 	}
 	
-	public boolean equals(Channel C) {
-		return name.equalsIgnoreCase(C.getName());
+	public boolean equals(Channel channel) {
+		return name.equalsIgnoreCase(channel.getName());
 	}
 }
