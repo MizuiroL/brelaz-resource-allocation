@@ -2,17 +2,18 @@ package brelaz;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.stream.Stream;
 
 public class Device {
-
-	private LinkedList<Channel> channel = new LinkedList<Channel>();
-
-	private LinkedList<Arch> arch = new LinkedList<Arch>();
-
-	private Channel assignedChannel;
+	/*
+	 * The device is the object of the network that uses channels to communicate.
+	 * It is defined by a name, the arches that connect it to other Devices, 
+	 * the list of channels that can be assigned to it and the Channel assigned to it.
+	 */
 
 	private String name;
+	private LinkedList<Arch> archesList = new LinkedList<Arch>();
+	private LinkedList<Channel> availableChannels = new LinkedList<Channel>();
+	private Channel assignedChannel;
 
 	public Device(String name) {
 		this.name = name;
@@ -20,24 +21,24 @@ public class Device {
 
 	////////// Getters and Setters////////////
 
-	public LinkedList<Channel> getChan() {
-		return channel;
+	public LinkedList<Channel> getChannelsList() {
+		return availableChannels;
 	}
 
-	public void setChan(LinkedList<Channel> C) {
-		channel = C;
+	public void setChannelsList(LinkedList<Channel> channelsList) {
+		this.availableChannels = channelsList;
 	}
 
 	public Channel getAssignedChannel() {
 		return assignedChannel;
 	}
 
-	public void setAssignedChan(Channel assignedChannel) {
+	public void setAssignedChannel(Channel assignedChannel) {
 		this.assignedChannel = assignedChannel;
 	}
 
-	public LinkedList<Arch> getArch() {
-		return arch;
+	public LinkedList<Arch> getArchesList() {
+		return archesList;
 	}
 
 	public String getName() {
@@ -50,51 +51,69 @@ public class Device {
 	////////////////////////////////////////
 
 	public void addArch(Arch a) throws Exception {
-		this.arch.add(a);
+		this.archesList.add(a);
 	}
 
 	public void removeArch(Arch a) throws Exception {
-		this.arch.remove(a);
+		this.archesList.remove(a);
 	}
 
-	public void addChan(Channel ch) throws Exception {
-		this.channel.add(ch);
+	public void addChannel(Channel channel) throws Exception {
+		this.availableChannels.add(channel);
 	}
 
-	public void removeChan(Channel ch) throws Exception {
-		this.channel.remove(ch);
+	public void removeChannel(Channel channel) throws Exception {
+		this.availableChannels.remove(channel);
 	}
 
 	public int rank() {
-		int n = 0;
-		Stream<Arch> stream = arch.stream();
-		n = (int) stream.count();
-		return n;
+		/*
+		 * Returns the rank of the node, simply by counting how many arches it has
+		 * (and therefore how many Devices it is connected with)
+		 */
+		return (int) archesList.stream().count();
 	}
 
 	public void updateTopology() throws Exception {
+		/*
+		 * When a Channel is assigned to a Device the topology needs to be updated.
+		 * If the adjacent devices have a different assigned channel the arch connecting the two nodes has to be deleted.
+		 */
 		if (getAssignedChannel() != null) {
-			Iterator<Arch> iterator = arch.iterator();
+			Iterator<Arch> iterator = archesList.iterator();
+			// The channel of the device is compared to each of the adjacent devices' assigned channel.
 			while (iterator.hasNext()) {
-				Arch arch = iterator.next();
-				if (arch.getB().getAssignedChannel() != null && arch.getA().getAssignedChannel() != null
-						&& arch.getA().getAssignedChannel().equals(arch.getB().getAssignedChannel())) {
-					this.removeArch(arch);
+				Arch archPointer = iterator.next();
+				Device deviceA = archPointer.getA(), deviceB = archPointer.getB();
+				if (deviceB.getAssignedChannel() != null && deviceA.getAssignedChannel() != null
+						/*
+						 *  The comparison of the two devices' assigned channels is only done if
+						 *  both of the devices actually have assigned channels
+						 */
+						&& deviceA.getAssignedChannel().equals(deviceB.getAssignedChannel())) {
+					this.removeArch(archPointer);
 				}
 			}
-
 		}
 	}
 
 	public void printDevice() {
+		/*
+		 * Prints on console all of the device information:
+		 * its name;
+		 * the optional assigned channel;
+		 * the arches that connect it to other devices.
+		 */
 		System.out.println("Node: " + name);
+		
 		System.out.print("Assigned Channel: ");
 		if (assignedChannel != null) {
 			assignedChannel.printChannel();
 		} else {
 			System.out.println("There is no assigned channel");
 		}
-		Iterator<Arch> iterator = arch.iterator();
+		
+		Iterator<Arch> iterator = archesList.iterator();
 		while (iterator.hasNext()) {
 			iterator.next().printArch();
 		}

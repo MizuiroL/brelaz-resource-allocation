@@ -1,6 +1,10 @@
 package brelaz;
 
 class Channel {
+	/*
+	 * The channel is the resource to be assigned to the Devices of the Network.
+	 * In this case it is simply defined by its name.
+	 */
 
 	private String name;
 
